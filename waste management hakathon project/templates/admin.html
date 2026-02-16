@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Admin Dashboard</h2>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Department</th>
+        <th>Complaint</th>
+        <th>Image</th>
+        <th>Status</th>
+        <th>Update</th>
+    </tr>
+
+    {% for c in complaints %}
+    <tr>
+        <td>{{ c.id }}</td>
+        <td>{{ c.student_name }}</td>
+        <td>{{ c.department }}</td>
+        <td>{{ c.complaint_text }}</td>
+
+        <td>
+            {% if c.image %}
+                <img src="{{ url_for('static', filename='uploads/' + c.image) }}" width="80">
+            {% else %}
+                No Image
+            {% endif %}
+        </td>
+
+        <td>{{ c.status }}</td>
+
+        <td>
+            <form method="POST">
+                <input type="hidden" name="complaint_id" value="{{ c.id }}">
+                <select name="status">
+                    <option>Pending</option>
+                    <option>In Progress</option>
+                    <option>Resolved</option>
+                </select>
+                <button type="submit">Update</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

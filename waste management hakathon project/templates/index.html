@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal | Waste Management Enterprise System</title>
+    
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #0a1929;
+            --secondary-color: #1e4976;
+            --accent-color: #0066cc;
+            --success-color: #00a86b;
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --background-light: #f8fafc;
+            --white: #ffffff;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 25px -5px rgba(0,0,0,0.1);
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--background-light);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Professional Header */
+        .enterprise-header {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 16px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-md);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            color: white;
+        }
+
+        .brand-text h1 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .brand-text span {
+            font-size: 12px;
+            opacity: 0.8;
+            font-weight: 400;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .header-link {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .header-link:hover {
+            color: var(--white);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 100px;
+            min-height: calc(100vh - 80px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e7eb 100%);
+        }
+
+        /* Enterprise Login Card */
+        .enterprise-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 480px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            padding: 32px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-decoration {
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1) 0%, transparent 50%);
+        }
+
+        .login-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .login-icon i {
+            font-size: 28px;
+            color: var(--white);
+        }
+
+        .card-header h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 8px;
+        }
+
+        .card-header p {
+            color: rgba(255,255,255,0.8);
+            font-size: 14px;
+        }
+
+        /* Card Body */
+        .card-body {
+            padding: 40px;
+        }
+
+        .form-section {
+            margin-bottom: 32px;
+        }
+
+        .form-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 16px;
+            height: 2px;
+            background: var(--accent-color);
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .form-label span {
+            color: #e53e3e;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            color: var(--text-primary);
+            background: var(--white);
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(0,102,204,0.1);
+        }
+
+        .input-group .icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            pointer-events: none;
+        }
+
+        .input-group .toggle-password {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 4px;
+            z-index: 2;
+        }
+
+        .input-group .toggle-password:hover {
+            color: var(--accent-color);
+        }
+
+        /* Form Helpers */
+        .form-helper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 8px;
+            font-size: 13px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .remember-me input {
+            width: 16px;
+            height: 16px;
+        }
+
+        .remember-me label {
+            color: var(--text-secondary);
+        }
+
+        .forgot-password {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,102,204,0.2);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn.loading i {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Alternative Login */
+        .alternative-login {
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+            margin-top: 32px;
+        }
+
+        .alternative-login p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        /* Links Section */
+        .links-section {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .link-item {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .link-item:hover {
+            text-decoration: underline;
+        }
+
+        /* System Status */
+        .system-status {
+            background: var(--background-light);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-top: 32px;
+            border: 1px solid var(--border-color);
+        }
+
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .status-header h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 4px 12px;
+            background: var(--success-color);
+            color: var(--white);
+            border-radius: 20px;
+        }
+
+        .status-indicator::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--white);
+            border-radius: 50%;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .status-item {
+            text-align: center;
+        }
+
+        .status-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+        }
+
+        .status-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Footer */
+        .enterprise-footer {
+            background: var(--primary-color);
+            color: rgba(255,255,255,0.7);
+            padding: 24px 0;
+            font-size: 13px;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 90px;
+            right: 24px;
+            background: var(--white);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1000;
+            max-width: 400px;
+            transform: translateX(500px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .notification.success .notification-icon {
+            background: rgba(0,168,107,0.1);
+            color: var(--success-color);
+        }
+
+        .notification.error .notification-icon {
+            background: rgba(229,62,62,0.1);
+            color: #e53e3e;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .notification-message {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 0 16px;
+            }
+            
+            .main-content {
+                padding: 100px 16px 40px;
+            }
+            
+            .enterprise-card {
+                max-width: 100%;
+            }
+            
+            .card-body {
+                padding: 32px 24px;
+            }
+            
+            .status-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .footer-container {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+            
+            .footer-links {
+                gap: 16px;
+            }
+            
+            .notification {
+                left: 16px;
+                right: 16px;
+                max-width: calc(100% - 32px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card-body {
+                padding: 24px 16px;
+            }
+            
+            .links-section {
+                flex-direction: column;
+                gap: 12px;
+                align-items: center;
+            }
+            
+            .header-actions {
+                display: none;
+            }
+        }
+
+        /* Utility Classes */
+        .text-center { text-align: center; }
+        .mt-1 { margin-top: 4px; }
+        .mt-2 { margin-top: 8px; }
+        .mt-3 { margin-top: 12px; }
+        .mt-4 { margin-top: 16px; }
+        .mt-5 { margin-top: 20px; }
+        .mb-1 { margin-bottom: 4px; }
+        .mb-2 { margin-bottom: 8px; }
+        .mb-3 { margin-bottom: 12px; }
+        .mb-4 { margin-bottom: 16px; }
+        .mb-5 { margin-bottom: 20px; }
+
+        /* Loading Animation */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-content {
+            text-align: center;
+            color: var(--white);
+        }
+
+        .loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: var(--white);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        .loading-text {
+            font-size: 16px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-overlay" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Initializing Student Portal</div>
+        </div>
+    </div>
+
+    <!-- Enterprise Header -->
+    <header class="enterprise-header">
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="logo">WM</div>
+                <div class="brand-text">
+                    <h1>Waste Management System</h1>
+                    <span>Enterprise Student Portal</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a href="#" class="header-link">Documentation</a>
+                <a href="#" class="header-link">Support</a>
+                <a href="#" class="header-link">Status</a>
+                <span class="header-link">v4.2.1</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="enterprise-card" data-aos="fade-up" data-aos-duration="600">
+            <!-- Card Header -->
+            <div class="card-header">
+                <div class="header-decoration"></div>
+                <div class="login-icon">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <h2>Student Portal</h2>
+                <p>Secure Access to Waste Management System</p>
+            </div>
+
+            <!-- Card Body -->
+            <div class="card-body">
+                <!-- Flash Messages -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="notification {{ category }} show" id="flashMessage">
+                                <div class="notification-icon">
+                                    <i class="fas fa-{{ 'check-circle' if category == 'success' else 'exclamation-triangle' }}"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <div class="notification-title">
+                                        {{ 'Success' if category == 'success' else 'Error' }}
+                                    </div>
+                                    <div class="notification-message">{{ message }}</div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <!-- Login Form -->
+                <form id="loginForm" method="POST" action="{{ url_for('index') }}">
+                    <div class="form-section">
+                        <div class="section-title">Credentials</div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Roll Number <span>*</span></label>
+                            <div class="input-group">
+                                <input type="text" 
+                                       name="roll_no" 
+                                       id="rollNumber"
+                                       placeholder="Enter your university roll number"
+                                       required
+                                       autocomplete="username"
+                                       autofocus>
+                                <div class="icon">
+                                    <i class="fas fa-id-card"></i>
+                                </div>
+                            </div>
+                            <div class="form-helper">
+                                <span class="helper-text">Format: ABC123456789</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Password <span>*</span></label>
+                            <div class="input-group">
+                                <input type="password" 
+                                       name="password" 
+                                       id="password"
+                                       placeholder="Enter your secure password"
+                                       required
+                                       autocomplete="current-password">
+                                <button type="button" class="toggle-password" id="togglePassword">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <div class="icon">
+                                    <i class="fas fa-lock"></i>
+                                </div>
+                            </div>
+                            <div class="form-helper">
+                                <div class="remember-me">
+                                    <input type="checkbox" id="rememberMe">
+                                    <label for="rememberMe">Remember me</label>
+                                </div>
+                                <a href="{{ url_for('forgot_password') }}" class="forgot-password">
+                                    Forgot Password?
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Login to Portal
+                    </button>
+                </form>
+
+                <!-- Registration Section -->
+                <div class="alternative-login">
+                    <p>Don't have an account yet?</p>
+                    <a href="{{ url_for('student_signup') }}" class="submit-btn" style="background: var(--text-secondary);">
+                        <i class="fas fa-user-plus"></i>
+                        Create New Account
+                    </a>
+                    <p class="mt-3" style="font-size: 13px; color: var(--text-secondary);">
+                        <i class="fas fa-info-circle me-1"></i>
+                        New students: Create account with Google or email
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="links-section">
+                    <a href="#" class="link-item">
+                        <i class="fas fa-question-circle"></i>
+                        Help Center
+                    </a>
+                    <a href="#" class="link-item">
+                        <i class="fas fa-book"></i>
+                        User Guide
+                    </a>
+                    <a href="#" class="link-item">
+                        <i class="fas fa-shield-alt"></i>
+                        Security
+                    </a>
+                </div>
+
+                <!-- System Status -->
+                <div class="system-status">
+                    <div class="status-header">
+                        <h4>System Status</h4>
+                        <div class="status-indicator">Online</div>
+                    </div>
+                    <div class="status-grid">
+                        <div class="status-item">
+                            <div class="status-value">{{ stats.total_students|default('2,847') }}</div>
+                            <div class="status-label">Active Students</div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-value">{{ stats.total_complaints|default('15,923') }}</div>
+                            <div class="status-label">Total Reports</div>
+                        </div>
+                        <div class="status-item">
+                            <div class="status-value">{{ stats.resolution_rate|default('94') }}%</div>
+                            <div class="status-label">Resolution Rate</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Enterprise Footer -->
+    <footer class="enterprise-footer">
+        <div class="footer-container">
+            <div>
+                © {{ current_year }} Waste Management Enterprise System. All rights reserved.
+            </div>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Contact</a>
+                <a href="#">System: {{ stats.resolution_rate|default('94') }}% Uptime</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 600,
+            once: true,
+            offset: 100
+        });
+
+        // Hide loading screen
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hidden');
+            }, 800);
+        });
+
+        // Password toggle
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+        
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.innerHTML = type === 'password' ? 
+                '<i class="fas fa-eye"></i>' : 
+                '<i class="fas fa-eye-slash"></i>';
+        });
+
+        // Form submission
+        const loginForm = document.getElementById('loginForm');
+        const submitBtn = document.getElementById('submitBtn');
+        
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validation
+            const rollNumber = document.getElementById('rollNumber');
+            const password = document.getElementById('password');
+            
+            if (!rollNumber.value.trim()) {
+                showNotification('Please enter your roll number', 'error');
+                rollNumber.focus();
+                return;
+            }
+            
+            if (!password.value.trim()) {
+                showNotification('Please enter your password', 'error');
+                password.focus();
+                return;
+            }
+            
+            // Show loading state
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Authenticating...';
+            submitBtn.disabled = true;
+            submitBtn.classList.add('loading');
+            
+            // Submit the form
+            this.submit();
+        });
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type} show`;
+            notification.innerHTML = `
+                <div class="notification-icon">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">${type === 'success' ? 'Success' : 'Error'}</div>
+                    <div class="notification-message">${message}</div>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Remove after 5 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 5000);
+        }
+
+        // Auto-hide flash messages
+        const flashMessage = document.getElementById('flashMessage');
+        if (flashMessage) {
+            setTimeout(() => {
+                flashMessage.classList.remove('show');
+                setTimeout(() => flashMessage.remove(), 300);
+            }, 5000);
+        }
+
+        // Input validation
+        const rollNumberInput = document.getElementById('rollNumber');
+        rollNumberInput.addEventListener('input', function(e) {
+            const value = e.target.value;
+            // Allow only alphanumeric
+            e.target.value = value.replace(/[^a-zA-Z0-9]/g, '');
+        });
+
+        // Remember me functionality
+        const rememberMe = document.getElementById('rememberMe');
+        const savedRollNumber = localStorage.getItem('rememberedRollNumber');
+        
+        if (savedRollNumber) {
+            document.getElementById('rollNumber').value = savedRollNumber;
+            rememberMe.checked = true;
+        }
+        
+        rememberMe.addEventListener('change', function() {
+            if (this.checked) {
+                const rollNumber = document.getElementById('rollNumber').value;
+                if (rollNumber) {
+                    localStorage.setItem('rememberedRollNumber', rollNumber);
+                }
+            } else {
+                localStorage.removeItem('rememberedRollNumber');
+            }
+        });
+
+        // Focus management
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.activeElement.blur();
+            }
+        });
+
+        // System status update (simulated)
+        function updateSystemStatus() {
+            const statusValue = document.querySelector('.status-value:last-child');
+            if (statusValue) {
+                const current = parseInt(statusValue.textContent);
+                const newValue = Math.min(100, Math.max(90, current + (Math.random() - 0.5) * 2));
+                statusValue.textContent = Math.round(newValue) + '%';
+            }
+        }
+
+        // Update status every 30 seconds
+        setInterval(updateSystemStatus, 30000);
+    </script>
+</body>
+</html>

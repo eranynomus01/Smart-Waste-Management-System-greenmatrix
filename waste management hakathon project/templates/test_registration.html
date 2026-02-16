@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Registration</title>
+</head>
+<body>
+    <h1>Test Registration Flow</h1>
+    
+    <h2>Option 1: Test Google Flow</h2>
+    <p><a href="{{ url_for('google_login') }}">Login with Google</a></p>
+    
+    <h2>Option 2: Test Email Verification</h2>
+    <form action="{{ url_for('student_signup') }}" method="GET">
+        <button type="submit">Go to Email Signup</button>
+    </form>
+    
+    <h2>Debug Info:</h2>
+    <p><a href="{{ url_for('debug_session') }}">Check Session Data</a></p>
+    
+    <h2>Direct Test (Bypass Google):</h2>
+    <form action="{{ url_for('test_direct_registration') }}" method="GET">
+        <button type="submit">Test Direct Registration</button>
+    </form>
+</body>
+</html>

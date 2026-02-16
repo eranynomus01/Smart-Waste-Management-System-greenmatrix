@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Google Signup - Waste Management</title>
+    
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #0f766e;
+            --primary-dark: #115e59;
+            --google-blue: #4285f4;
+            --google-red: #ea4335;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .signup-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        .google-info-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid #e9ecef;
+            margin-bottom: 30px;
+        }
+        
+        .google-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .google-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .google-details h5 {
+            margin: 0;
+            color: #202124;
+            font-weight: 600;
+        }
+        
+        .google-details p {
+            margin: 5px 0 0 0;
+            color: #5f6368;
+            font-size: 14px;
+        }
+        
+        .verified-badge {
+            background: #34a853;
+            color: white;
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 5px;
+        }
+        
+        .header-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 24px;
+        }
+        
+        h2 {
+            color: var(--primary);
+            text-align: center;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #6c757d;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+        
+        .form-control {
+            border-radius: 12px;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(15,118,110,0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            padding: 14px;
+            font-weight: 600;
+            border-radius: 12px;
+            width: 100%;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(15,118,110,0.3);
+        }
+        
+        .alert {
+            border-radius: 12px;
+            border: none;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+        }
+        
+        .back-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        
+        .back-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .required {
+            color: var(--google-red);
+        }
+        
+        @media (max-width: 576px) {
+            .signup-card {
+                padding: 30px 20px;
+            }
+            
+            .google-profile {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .google-details {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="signup-card">
+        <!-- Header -->
+        <div class="header-icon">
+            <i class="fas fa-user-plus"></i>
+        </div>
+        
+        <h2>Complete Your Registration</h2>
+        <p class="subtitle">Finish setting up your account with Google</p>
+        
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        <i class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <!-- Google User Info -->
+        <div class="google-info-card">
+            <div class="google-profile">
+                {% if user_info.picture %}
+                <img src="{{ user_info.picture }}" alt="Google Profile" class="google-avatar">
+                {% else %}
+                <div class="google-avatar" style="background: var(--google-blue); display: flex; align-items: center; justify-content: center; color: white; font-size: 24px;">
+                    {{ user_info.name[0]|upper }}
+                </div>
+                {% endif %}
+                <div class="google-details">
+                    <h5>{{ user_info.name }}</h5>
+                    <p>{{ user_info.email }}</p>
+                    <div class="verified-badge">
+                        <i class="fas fa-check-circle"></i>
+                        Google Verified
+                    </div>
+                </div>
+            </div>
+            <div style="font-size: 14px; color: #5f6368; text-align: center;">
+                <i class="fas fa-shield-alt me-1"></i>
+                Securely signed in with Google
+            </div>
+        </div>
+        
+        <!-- Signup Form -->
+        <form method="POST" action="{{ url_for('google_signup') }}">
+            <div class="mb-3">
+                <label for="roll_no" class="form-label">
+                    Roll Number <span class="required">*</span>
+                </label>
+                <input type="text" 
+                       class="form-control" 
+                       id="roll_no" 
+                       name="roll_no" 
+                       placeholder="Enter your university roll number" 
+                       required
+                       maxlength="12"
+                       pattern="\d+"
+                       title="Enter numeric roll number">
+                <div class="form-text">University roll number (numbers only)</div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="department" class="form-label">
+                    Department <span class="required">*</span>
+                </label>
+                <select class="form-control" id="department" name="department" required>
+                    <option value="">Select your department</option>
+                    <option value="Computer Science">Computer Science</option>
+                    <option value="Information Technology">Information Technology</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Mechanical">Mechanical</option>
+                    <option value="Civil">Civil</option>
+                    <option value="Electrical">Electrical</option>
+                    <option value="Business Administration">Business Administration</option>
+                    <option value="Commerce">Commerce</option>
+                    <option value="Arts">Arts</option>
+                    <option value="Science">Science</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            
+            <div class="mb-4">
+                <label for="phone" class="form-label">Phone Number (Optional)</label>
+                <input type="tel" 
+                       class="form-control" 
+                       id="phone" 
+                       name="phone" 
+                       placeholder="Enter your phone number">
+                <div class="form-text">Optional - for important notifications</div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-link me-2"></i>
+                Link Google Account
+            </button>
+            
+            <div class="back-link">
+                <a href="{{ url_for('index') }}">Back to Login</a>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-close alerts after 5 seconds
+            setTimeout(function() {
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(alert => {
+                    const bsAlert = new bootstrap.Alert(alert);
+                    bsAlert.close();
+                });
+            }, 5000);
+            
+            // Form validation
+            const form = document.querySelector('form');
+            const submitBtn = form.querySelector('button[type="submit"]');
+            
+            form.addEventListener('submit', function(e) {
+                const rollNo = document.getElementById('roll_no');
+                const department = document.getElementById('department');
+                
+                // Simple validation
+                if (!rollNo.value.trim()) {
+                    e.preventDefault();
+                    alert('Please enter your roll number');
+                    rollNo.focus();
+                    return false;
+                }
+                
+                if (!department.value) {
+                    e.preventDefault();
+                    alert('Please select your department');
+                    department.focus();
+                    return false;
+                }
+                
+                // Show loading state
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Linking Account...';
+                submitBtn.disabled = true;
+                
+                return true;
+            });
+            
+            // Focus on first input
+            document.getElementById('roll_no').focus();
+        });
+    </script>
+</body>
+</html>

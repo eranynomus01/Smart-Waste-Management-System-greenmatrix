@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Analytics | Waste Management System</title>
+    
+    <!-- Bootstrap & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    
+    <!-- ApexCharts for advanced visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    
+    <!-- DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    
+    <!-- Date Range Picker -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #0f766e;
+            --primary-dark: #115e59;
+            --primary-light: #d1fae5;
+            --secondary: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #8b5cf6;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --border-radius: 12px;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.12);
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #f0f9ff 100%);
+            min-height: 100vh;
+            color: var(--dark);
+        }
+        
+        /* Header */
+        .analytics-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1.5rem 2rem;
+            box-shadow: var(--shadow);
+        }
+        
+        /* Filters Card */
+        .filters-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            box-shadow: var(--shadow);
+        }
+        
+        /* Metrics Cards */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .metric-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .metric-card h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+            color: var(--dark);
+        }
+        
+        .metric-card p {
+            color: var(--gray);
+            margin: 0.5rem 0 0;
+            font-size: 0.9rem;
+        }
+        
+        .metric-change {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+        
+        .change-positive { color: var(--success); }
+        .change-negative { color: var(--danger); }
+        
+        /* Charts Container */
+        .charts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .chart-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+        
+        /* Heatmap Container */
+        .heatmap-container {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            margin: 1.5rem 0;
+        }
+        
+        /* Data Tables */
+        .data-table-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            margin: 1.5rem 0;
+        }
+        
+        /* KPI Cards */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .kpi-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+        
+        .kpi-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0.5rem 0;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .analytics-header {
+                padding: 1rem;
+            }
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+        
+        /* Loading animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Trend indicators */
+        .trend-up {
+            color: var(--success);
+            animation: pulse-up 2s infinite;
+        }
+        
+        .trend-down {
+            color: var(--danger);
+            animation: pulse-down 2s infinite;
+        }
+        
+        @keyframes pulse-up {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        @keyframes pulse-down {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="analytics-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1><i class="fas fa-chart-line me-2"></i>Advanced Analytics Dashboard</h1>
+                    <p class="mb-0">Comprehensive insights and performance metrics</p>
+                </div>
+                <div>
+                    <a href="/admin/dashboard" class="btn btn-light">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container py-4">
+        <!-- Date Range Filter -->
+        <div class="filters-card">
+            <div class="row align-items-center">
+                <div class="col-md-4">
+                    <h5><i class="fas fa-calendar-alt me-2"></i>Select Date Range</h5>
+                    <input type="text" class="form-control" id="dateRangePicker" readonly>
+                </div>
+                <div class="col-md-8">
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-outline-primary" onclick="setDateRange('today')">
+                            <i class="fas fa-sun me-1"></i>Today
+                        </button>
+                        <button class="btn btn-outline-primary" onclick="setDateRange('week')">
+                            <i class="fas fa-calendar-week me-1"></i>This Week
+                        </button>
+                        <button class="btn btn-outline-primary" onclick="setDateRange('month')">
+                            <i class="fas fa-calendar me-1"></i>This Month
+                        </button>
+                        <button class="btn btn-outline-primary" onclick="setDateRange('quarter')">
+                            <i class="fas fa-chart-bar me-1"></i>This Quarter
+                        </button>
+                        <button class="btn btn-outline-primary" onclick="setDateRange('year')">
+                            <i class="fas fa-calendar-alt me-1"></i>This Year
+                        </button>
+                        <button class="btn btn-primary" onclick="applyFilters()">
+                            <i class="fas fa-filter me-1"></i>Apply Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h3 id="totalComplaints">0</h3>
+                        <p>Total Complaints</p>
+                        <div class="metric-change">
+                            <span id="complaintsChange" class="change-positive">+0%</span> vs previous period
+                        </div>
+                    </div>
+                    <div class="icon-container" style="background: var(--primary-light); color: var(--primary);">
+                        <i class="fas fa-clipboard-list fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h3 id="avgResolutionTime">0h</h3>
+                        <p>Avg. Resolution Time</p>
+                        <div class="metric-change">
+                            <span id="resolutionTimeChange" class="change-negative">-0%</span> efficiency change
+                        </div>
+                    </div>
+                    <div class="icon-container" style="background: #dbeafe; color: var(--secondary);">
+                        <i class="fas fa-stopwatch fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h3 id="resolutionRate">0%</h3>
+                        <p>Resolution Rate</p>
+                        <div class="metric-change">
+                            <span id="resolutionRateChange" class="change-positive">+0%</span> improvement
+                        </div>
+                    </div>
+                    <div class="icon-container" style="background: #d1fae5; color: var(--success);">
+                        <i class="fas fa-check-circle fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <h3 id="satisfactionScore">0%</h3>
+                        <p>Satisfaction Score</p>
+                        <div class="metric-change">
+                            <span id="satisfactionChange" class="change-positive">+0%</span> vs last period
+                        </div>
+                    </div>
+                    <div class="icon-container" style="background: #fef3c7; color: var(--warning);">
+                        <i class="fas fa-star fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Detailed Charts -->
+        <div class="charts-container">
+            <!-- Complaint Trend Chart -->
+            <div class="chart-card">
+                <h5><i class="fas fa-chart-line me-2"></i>Complaint Trends</h5>
+                <div class="chart-container" style="height: 300px;">
+                    <canvas id="complaintTrendChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Category Distribution -->
+            <div class="chart-card">
+                <h5><i class="fas fa-chart-pie me-2"></i>Issue Type Distribution</h5>
+                <div class="chart-container" style="height: 300px;">
+                    <canvas id="categoryDistributionChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Resolution Time Analysis -->
+            <div class="chart-card">
+                <h5><i class="fas fa-clock me-2"></i>Resolution Time Analysis</h5>
+                <div class="chart-container" style="height: 300px;">
+                    <canvas id="resolutionTimeChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Department Performance -->
+            <div class="chart-card">
+                <h5><i class="fas fa-building me-2"></i>Department Performance</h5>
+                <div class="chart-container" style="height: 300px;">
+                    <canvas id="departmentPerformanceChart"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Heatmap Section -->
+        <div class="heatmap-container">
+            <h5><i class="fas fa-map me-2"></i>Complaint Density Heatmap</h5>
+            <p class="text-muted mb-3">Visual representation of complaint frequency across campus locations</p>
+            <div id="heatmapChart" style="height: 400px;"></div>
+        </div>
+        
+        <!-- KPI Summary -->
+        <div class="data-table-card">
+            <h5><i class="fas fa-tachometer-alt me-2"></i>Key Performance Indicators</h5>
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">First Response Time</div>
+                    <div class="kpi-value">2.4h</div>
+                    <div class="kpi-change trend-down"><i class="fas fa-arrow-down"></i> 12%</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Repeat Complaints</div>
+                    <div class="kpi-value">8.2%</div>
+                    <div class="kpi-change trend-up"><i class="fas fa-arrow-up"></i> 5%</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">High Priority Resolved</div>
+                    <div class="kpi-value">92%</div>
+                    <div class="kpi-change trend-up"><i class="fas fa-arrow-up"></i> 8%</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Student Satisfaction</div>
+                    <div class="kpi-value">4.2/5</div>
+                    <div class="kpi-change trend-up"><i class="fas fa-arrow-up"></i> 15%</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Cost per Resolution</div>
+                    <div class="kpi-value">$24.50</div>
+                    <div class="kpi-change trend-down"><i class="fas fa-arrow-down"></i> 18%</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Staff Efficiency</div>
+                    <div class="kpi-value">87%</div>
+                    <div class="kpi-change trend-up"><i class="fas fa-arrow-up"></i> 7%</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Predictive Analytics -->
+        <div class="data-table-card">
+            <h5><i class="fas fa-crystal-ball me-2"></i>Predictive Analytics & Forecast</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h6 class="card-title"><i class="fas fa-chart-area me-2"></i>Complaint Forecast</h6>
+                            <div id="forecastChart" style="height: 250px;"></div>
+                            <p class="text-muted mt-2">Predicted complaints for next 30 days: <strong>142</strong></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h6 class="card-title"><i class="fas fa-exclamation-triangle me-2"></i>Risk Analysis</h6>
+                            <div class="mt-3">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>High Risk Areas</span>
+                                    <span class="badge bg-danger">3</span>
+                                </div>
+                                <div class="progress mb-3" style="height: 10px;">
+                                    <div class="progress-bar bg-danger" style="width: 15%"></div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Medium Risk</span>
+                                    <span class="badge bg-warning">8</span>
+                                </div>
+                                <div class="progress mb-3" style="height: 10px;">
+                                    <div class="progress-bar bg-warning" style="width: 40%"></div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Low Risk</span>
+                                    <span class="badge bg-success">24</span>
+                                </div>
+                                <div class="progress mb-3" style="height: 10px;">
+                                    <div class="progress-bar bg-success" style="width: 45%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Detailed Data Table -->
+        <div class="data-table-card">
+            <h5><i class="fas fa-table me-2"></i>Detailed Analytics Data</h5>
+            <table id="analyticsTable" class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Period</th>
+                        <th>Total Complaints</th>
+                        <th>Resolved</th>
+                        <th>Pending</th>
+                        <th>Avg. Resolution Time</th>
+                        <th>High Priority</th>
+                        <th>Satisfaction</th>
+                        <th>Trend</th>
+                    </tr>
+                </thead>
+                <tbody id="analyticsTableBody">
+                    <!-- Data will be populated by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Export Options -->
+        <div class="data-table-card">
+            <h5><i class="fas fa-download me-2"></i>Export Analytics</h5>
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-primary" onclick="exportData('csv')">
+                    <i class="fas fa-file-csv me-2"></i>Export as CSV
+                </button>
+                <button class="btn btn-outline-primary" onclick="exportData('pdf')">
+                    <i class="fas fa-file-pdf me-2"></i>Export as PDF
+                </button>
+                <button class="btn btn-outline-primary" onclick="exportData('excel')">
+                    <i class="fas fa-file-excel me-2"></i>Export as Excel
+                </button>
+                <button class="btn btn-outline-primary" onclick="generateReport()">
+                    <i class="fas fa-chart-bar me-2"></i>Generate Full Report
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Global variables
+        let analyticsData = {};
+        let startDate = moment().subtract(30, 'days');
+        let endDate = moment();
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDatePicker();
+            loadAnalyticsData();
+            initializeCharts();
+        });
+        
+        // Initialize Date Range Picker
+        function initializeDatePicker() {
+            $('#dateRangePicker').daterangepicker({
+                startDate: startDate,
+                endDate: endDate,
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
+                opens: 'left',
+                locale: {
+                    format: 'YYYY-MM-DD',
+                    applyLabel: 'Apply',
+                    cancelLabel: 'Cancel',
+                    customRangeLabel: 'Custom Range'
+                }
+            }, function(start, end, label) {
+                startDate = start;
+                endDate = end;
+                console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+            });
+        }
+        
+        // Set date range shortcuts
+        function setDateRange(range) {
+            let newStart, newEnd;
+            
+            switch(range) {
+                case 'today':
+                    newStart = moment();
+                    newEnd = moment();
+                    break;
+                case 'week':
+                    newStart = moment().startOf('week');
+                    newEnd = moment().endOf('week');
+                    break;
+                case 'month':
+                    newStart = moment().startOf('month');
+                    newEnd = moment().endOf('month');
+                    break;
+                case 'quarter':
+                    newStart = moment().startOf('quarter');
+                    newEnd = moment().endOf('quarter');
+                    break;
+                case 'year':
+                    newStart = moment().startOf('year');
+                    newEnd = moment().endOf('year');
+                    break;
+                default:
+                    newStart = moment().subtract(30, 'days');
+                    newEnd = moment();
+            }
+            
+            $('#dateRangePicker').data('daterangepicker').setStartDate(newStart);
+            $('#dateRangePicker').data('daterangepicker').setEndDate(newEnd);
+            startDate = newStart;
+            endDate = newEnd;
+        }
+        
+        // Apply filters and reload data
+        function applyFilters() {
+            showLoading();
+            setTimeout(() => {
+                loadAnalyticsData();
+                hideLoading();
+            }, 1000);
+        }
+        
+        // Load analytics data
+        function loadAnalyticsData() {
+            // Simulate API call - in production, fetch from your Flask endpoint
+            fetch('/admin/analytics/data?' + new URLSearchParams({
+                start_date: startDate.format('YYYY-MM-DD'),
+                end_date: endDate.format('YYYY-MM-DD')
+            }))
+            .then(response => response.json())
+            .then(data => {
+                analyticsData = data;
+                updateMetrics();
+                updateCharts();
+                updateTable();
+                updateHeatmap();
+                updateForecast();
+            })
+            .catch(error => {
+                console.error('Error loading analytics data:', error);
+                // Fallback to sample data
+                loadSampleData();
+            });
+        }
+        
+        // Sample data for demonstration
+        function loadSampleData() {
+            analyticsData = {
+                total_complaints: 1245,
+                avg_resolution_time: 12.5,
+                resolution_rate: 87.3,
+                satisfaction_score: 4.2,
+                trends: {
+                    complaints: [45, 52, 38, 65, 72, 48, 55, 62, 58, 71, 65, 59],
+                    resolution_times: [14.2, 13.8, 15.1, 12.4, 11.9, 12.8, 11.5, 10.9, 12.1, 11.8, 11.2, 10.5],
+                    categories: ['Garbage', 'Odor', 'Recycling', 'Drain', 'Bin'],
+                    category_counts: [320, 180, 420, 155, 170],
+                    departments: ['CS', 'IT', 'Mech', 'Civil', 'Admin'],
+                    dept_performance: [92, 85, 78, 88, 95]
+                },
+                heatmap: [
+                    {x: 'Classroom', y: 'Monday', value: 12},
+                    {x: 'Hostel', y: 'Monday', value: 25},
+                    {x: 'Cafeteria', y: 'Monday', value: 18},
+                    {x: 'Library', y: 'Monday', value: 8},
+                    {x: 'Sports', y: 'Monday', value: 5},
+                    // ... more heatmap data
+                ],
+                forecast: {
+                    dates: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    actual: [45, 52, 38, 65, 72, 48],
+                    predicted: [55, 60, 50, 70, 65, 52]
+                }
+            };
+            
+            updateMetrics();
+            updateCharts();
+            updateTable();
+            updateHeatmap();
+            updateForecast();
+        }
+        
+        // Update metrics display
+        function updateMetrics() {
+            document.getElementById('totalComplaints').textContent = 
+                analyticsData.total_complaints?.toLocaleString() || '0';
+            
+            document.getElementById('avgResolutionTime').textContent = 
+                analyticsData.avg_resolution_time?.toFixed(1) + 'h' || '0h';
+            
+            document.getElementById('resolutionRate').textContent = 
+                analyticsData.resolution_rate?.toFixed(1) + '%' || '0%';
+            
+            document.getElementById('satisfactionScore').textContent = 
+                analyticsData.satisfaction_score?.toFixed(1) + '%' || '0%';
+            
+            // Calculate changes (simulated)
+            const complaintsChange = 12.5;
+            const resolutionTimeChange = -8.2;
+            const resolutionRateChange = 5.7;
+            const satisfactionChange = 3.4;
+            
+            updateChangeIndicator('complaintsChange', complaintsChange);
+            updateChangeIndicator('resolutionTimeChange', resolutionTimeChange);
+            updateChangeIndicator('resolutionRateChange', resolutionRateChange);
+            updateChangeIndicator('satisfactionChange', satisfactionChange);
+        }
+        
+        function updateChangeIndicator(elementId, change) {
+            const element = document.getElementById(elementId);
+            element.textContent = (change > 0 ? '+' : '') + change.toFixed(1) + '%';
+            element.className = change >= 0 ? 'change-positive' : 'change-negative';
+        }
+        
+        // Initialize charts
+        function initializeCharts() {
+            // Complaint Trend Chart
+            window.complaintTrendChart = new Chart(
+                document.getElementById('complaintTrendChart').getContext('2d'),
+                getTrendChartConfig()
+            );
+            
+            // Category Distribution Chart
+            window.categoryDistributionChart = new Chart(
+                document.getElementById('categoryDistributionChart').getContext('2d'),
+                getCategoryChartConfig()
+            );
+            
+            // Resolution Time Chart
+            window.resolutionTimeChart = new Chart(
+                document.getElementById('resolutionTimeChart').getContext('2d'),
+                getResolutionTimeChartConfig()
+            );
+            
+            // Department Performance Chart
+            window.departmentPerformanceChart = new Chart(
+                document.getElementById('departmentPerformanceChart').getContext('2d'),
+                getDepartmentChartConfig()
+            );
+        }
+        
+        // Update charts with data
+        function updateCharts() {
+            if (!analyticsData.trends) return;
+            
+            // Update complaint trend chart
+            complaintTrendChart.data.labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                                               'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            complaintTrendChart.data.datasets[0].data = analyticsData.trends.complaints;
+            complaintTrendChart.update();
+            
+            // Update category distribution chart
+            categoryDistributionChart.data.labels = analyticsData.trends.categories;
+            categoryDistributionChart.data.datasets[0].data = analyticsData.trends.category_counts;
+            categoryDistributionChart.update();
+            
+            // Update resolution time chart
+            resolutionTimeChart.data.datasets[0].data = analyticsData.trends.resolution_times;
+            resolutionTimeChart.update();
+            
+            // Update department performance chart
+            departmentPerformanceChart.data.labels = analyticsData.trends.departments;
+            departmentPerformanceChart.data.datasets[0].data = analyticsData.trends.dept_performance;
+            departmentPerformanceChart.update();
+        }
+        
+        // Chart configurations
+        function getTrendChartConfig() {
+            return {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Complaints',
+                        data: [],
+                        borderColor: '#0f766e',
+                        backgroundColor: 'rgba(15,118,110,0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        x: {
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        }
+                    }
+                }
+            };
+        }
+        
+        function getCategoryChartConfig() {
+            return {
+                type: 'doughnut',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        data: [],
+                        backgroundColor: [
+                            '#0f766e', '#10b981', '#3b82f6', '#8b5cf6', '#f59e0b',
+                            '#ef4444', '#ec4899', '#14b8a6'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: { padding: 20 }
+                        }
+                    }
+                }
+            };
+        }
+        
+        function getResolutionTimeChartConfig() {
+            return {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    datasets: [{
+                        label: 'Avg. Resolution Time (hours)',
+                        data: [],
+                        backgroundColor: '#8b5cf6',
+                        borderColor: '#7c3aed',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Hours'
+                            }
+                        }
+                    }
+                }
+            };
+        }
+        
+        function getDepartmentChartConfig() {
+            return {
+                type: 'radar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Performance Score',
+                        data: [],
+                        backgroundColor: 'rgba(59,130,246,0.2)',
+                        borderColor: '#3b82f6',
+                        pointBackgroundColor: '#3b82f6'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { stepSize: 20 }
+                        }
+                    }
+                }
+            };
+        }
+        
+        // Update heatmap
+        function updateHeatmap() {
+            if (!analyticsData.heatmap) return;
+            
+            const options = {
+                series: [{
+                    name: 'Complaints',
+                    data: analyticsData.heatmap
+                }],
+                chart: {
+                    height: 400,
+                    type: 'heatmap',
+                },
+                plotOptions: {
+                    heatmap: {
+                        shadeIntensity: 0.5,
+                        radius: 0,
+                        useFillColorAsStroke: true,
+                        colorScale: {
+                            ranges: [{
+                                from: 0,
+                                to: 10,
+                                name: 'Low',
+                                color: '#10b981'
+                            }, {
+                                from: 11,
+                                to: 20,
+                                name: 'Medium',
+                                color: '#f59e0b'
+                            }, {
+                                from: 21,
+                                to: 30,
+                                name: 'High',
+                                color: '#ef4444'
+                            }]
+                        }
+                    }
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                xaxis: {
+                    type: 'category',
+                    categories: ['Classroom', 'Hostel', 'Cafeteria', 'Library', 'Sports', 'Admin', 'Parking']
+                },
+                yaxis: {
+                    categories: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+                }
+            };
+            
+            const chart = new ApexCharts(document.querySelector("#heatmapChart"), options);
+            chart.render();
+        }
+        
+        // Update forecast chart
+        function updateForecast() {
+            if (!analyticsData.forecast) return;
+            
+            const options = {
+                series: [{
+                    name: 'Actual',
+                    data: analyticsData.forecast.actual
+                }, {
+                    name: 'Forecast',
+                    data: analyticsData.forecast.predicted
+                }],
+                chart: {
+                    height: 250,
+                    type: 'area',
+                    toolbar: { show: false }
+                },
+                dataLabels: { enabled: false },
+                stroke: {
+                    curve: 'smooth',
+                    width: 2
+                },
+                colors: ['#0f766e', '#3b82f6'],
+                fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shadeIntensity: 1,
+                        opacityFrom: 0.7,
+                        opacityTo: 0.3,
+                        stops: [0, 90, 100]
+                    }
+                },
+                xaxis: {
+                    categories: analyticsData.forecast.dates
+                },
+                tooltip: {
+                    x: { format: 'MMM' }
+                }
+            };
+            
+            const chart = new ApexCharts(document.querySelector("#forecastChart"), options);
+            chart.render();
+        }
+        // Update table with data
+function updateTable() {
+    const tableBody = document.getElementById('analyticsTableBody');
+    if (!tableBody) return;
+    
+    // Sample data for the table
+    const periods = [
+        {period: 'Today', complaints: 42, resolved: 38, pending: 4, resolutionTime: '3.2h', highPriority: 8, satisfaction: '92%', trend: 'up'},
+        {period: 'Yesterday', complaints: 38, resolved: 35, pending: 3, resolutionTime: '4.1h', highPriority: 6, satisfaction: '89%', trend: 'up'},
+        {period: 'This Week', complaints: 245, resolved: 218, pending: 27, resolutionTime: '5.8h', highPriority: 45, satisfaction: '87%', trend: 'stable'},
+        {period: 'Last Week', complaints: 220, resolved: 195, pending: 25, resolutionTime: '6.3h', highPriority: 38, satisfaction: '85%', trend: 'up'},
+        {period: 'This Month', complaints: 1245, resolved: 1087, pending: 158, resolutionTime: '12.5h', highPriority: 210, satisfaction: '84%', trend: 'up'},
+        {period: 'Last Month', complaints: 1150, resolved: 980, pending: 170, resolutionTime: '14.2h', highPriority: 195, satisfaction: '82%', trend: 'up'},
+        {period: 'This Quarter', complaints: 3250, resolved: 2850, pending: 400, resolutionTime: '11.8h', highPriority: 580, satisfaction: '86%', trend: 'up'},
+        {period: 'Year to Date', complaints: 9850, resolved: 8650, pending: 1200, resolutionTime: '13.2h', highPriority: 1650, satisfaction: '85%', trend: 'stable'}
+    ];
+    
+    let html = '';
+    periods.forEach(item => {
+        const trendIcon = item.trend === 'up' ? 
+            '<span class="trend-up"><i class="fas fa-arrow-up"></i></span>' : 
+            item.trend === 'down' ? 
+            '<span class="trend-down"><i class="fas fa-arrow-down"></i></span>' : 
+            '<span><i class="fas fa-minus"></i></span>';
+        
+        html += `
+            <tr>
+                <td><strong>${item.period}</strong></td>
+                <td>${item.complaints.toLocaleString()}</td>
+                <td>${item.resolved.toLocaleString()}</td>
+                <td><span class="badge bg-warning">${item.pending}</span></td>
+                <td>${item.resolutionTime}</td>
+                <td><span class="badge bg-danger">${item.highPriority}</span></td>
+                <td>${item.satisfaction}</td>
+                <td>${trendIcon}</td>
+            </tr>
+        `;
+    });
+    
+    tableBody.innerHTML = html;
+    
+    // Initialize DataTable if not already initialized
+    if (!$.fn.DataTable.isDataTable('#analyticsTable')) {
+        $('#analyticsTable').DataTable({
+            pageLength: 10,
+            order: [[0, 'desc']],
+            responsive: true
+        });
+    }
+}
+
+// Export data functions
+function exportData(format) {
+    showLoading();
+    
+    // Simulate export process
+    setTimeout(() => {
+        hideLoading();
+        
+        let message = '';
+        switch(format) {
+            case 'csv':
+                message = 'CSV file exported successfully!';
+                break;
+            case 'pdf':
+                message = 'PDF report generated successfully!';
+                break;
+            case 'excel':
+                message = 'Excel spreadsheet exported successfully!';
+                break;
+        }
+        
+        showNotification(message, 'success');
+        
+        // In a real implementation, this would trigger a download
+        console.log(`Exporting analytics data as ${format.toUpperCase()}`);
+    }, 1500);
+}
+
+function generateReport() {
+    showLoading();
+    
+    // Simulate report generation
+    setTimeout(() => {
+        hideLoading();
+        
+        // Create a modal with report preview
+        const modalHtml = `
+            <div class="modal fade" id="reportModal" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"><i class="fas fa-chart-bar me-2"></i>Analytics Report Preview</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>Report Summary</h6>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <span>Period:</span>
+                                            <span>${startDate.format('MMM D, YYYY')} - ${endDate.format('MMM D, YYYY')}</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <span>Total Complaints:</span>
+                                            <span>${analyticsData.total_complaints || 1245}</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <span>Resolution Rate:</span>
+                                            <span>${analyticsData.resolution_rate || 87.3}%</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <span>Avg. Satisfaction:</span>
+                                            <span>${analyticsData.satisfaction_score || 4.2}/5</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Key Findings</h6>
+                                    <div class="alert alert-success">
+                                        <i class="fas fa-check-circle me-2"></i>
+                                        <strong>Positive:</strong> Resolution time improved by 18%
+                                    </div>
+                                    <div class="alert alert-warning">
+                                        <i class="fas fa-exclamation-triangle me-2"></i>
+                                        <strong>Attention:</strong> Hostel area complaints increased by 25%
+                                    </div>
+                                    <div class="alert alert-info">
+                                        <i class="fas fa-lightbulb me-2"></i>
+                                        <strong>Recommendation:</strong> Increase bins in cafeteria area
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <h6>Report Options</h6>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="includeCharts" checked>
+                                    <label class="form-check-label" for="includeCharts">
+                                        Include charts and graphs
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="includeRawData" checked>
+                                    <label class="form-check-label" for="includeRawData">
+                                        Include raw data tables
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="includeRecommendations">
+                                    <label class="form-check-label" for="includeRecommendations">
+                                        Include recommendations
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" onclick="downloadFullReport()">
+                                <i class="fas fa-download me-2"></i>Download Full Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // Add modal to DOM
+        const modalContainer = document.createElement('div');
+        modalContainer.innerHTML = modalHtml;
+        document.body.appendChild(modalContainer);
+        
+        // Show the modal
+        const modal = new bootstrap.Modal(document.getElementById('reportModal'));
+        modal.show();
+        
+        // Remove modal from DOM after it's hidden
+        document.getElementById('reportModal').addEventListener('hidden.bs.modal', function() {
+            document.body.removeChild(modalContainer);
+        });
+    }, 2000);
+}
+
+function downloadFullReport() {
+    showLoading();
+    
+    setTimeout(() => {
+        hideLoading();
+        showNotification('Full report generated and downloaded successfully!', 'success');
+        
+        // Close the modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('reportModal'));
+        modal.hide();
+        
+        // In a real implementation, this would trigger a PDF download
+        console.log('Downloading comprehensive analytics report...');
+    }, 1500);
+}
+
+// Loading functions
+function showLoading() {
+    // Add loading overlay
+    const loadingOverlay = document.createElement('div');
+    loadingOverlay.id = 'loadingOverlay';
+    loadingOverlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255,255,255,0.8);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    `;
+    
+    loadingOverlay.innerHTML = `
+        <div class="text-center">
+            <div class="loading" style="width: 50px; height: 50px; margin-bottom: 20px;"></div>
+            <h5>Loading analytics data...</h5>
+        </div>
+    `;
+    
+    document.body.appendChild(loadingOverlay);
+}
+
+function hideLoading() {
+    const overlay = document.getElementById('loadingOverlay');
+    if (overlay) {
+        overlay.remove();
+    }
+}
+
+// Notification function
+function showNotification(message, type = 'info') {
+    // Remove existing notifications
+    const existingNotifications = document.querySelectorAll('.custom-notification');
+    existingNotifications.forEach(n => n.remove());
+    
+    const notification = document.createElement('div');
+    notification.className = `custom-notification alert alert-${type} alert-dismissible fade show`;
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 10000;
+        min-width: 300px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    `;
+    
+    notification.innerHTML = `
+        <strong>${type === 'success' ? 'Success!' : type === 'error' ? 'Error!' : 'Info!'}</strong> ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.remove();
+        }
+    }, 5000);
+}
+
+// Enhanced sample data generation
+function generateEnhancedSampleData() {
+    // Generate more realistic data
+    const categories = ['Garbage Overflow', 'Odor Issue', 'Recycling Mixup', 'Drain Blockage', 'Bin Damage', 
+                       'Collection Delay', 'Sanitation Issue', 'Animal Problem'];
+    
+    const departments = ['Computer Science', 'Information Tech', 'Mechanical', 'Civil', 'Administration', 
+                        'Electronics', 'Management', 'Science'];
+    
+    const locations = ['Main Building', 'Hostel A', 'Hostel B', 'Cafeteria', 'Library', 
+                      'Sports Complex', 'Admin Block', 'Parking Lot', 'Garden Area'];
+    
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    
+    // Generate heatmap data
+    const heatmapData = [];
+    locations.forEach(location => {
+        days.forEach(day => {
+            const value = Math.floor(Math.random() * 30) + 1;
+            heatmapData.push({
+                x: location,
+                y: day,
+                value: value
+            });
+        });
+    });
+    
+    // Generate trend data
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const complaintsTrend = months.map(() => Math.floor(Math.random() * 40) + 30);
+    const resolutionTrend = months.map(() => parseFloat((Math.random() * 6 + 8).toFixed(1)));
+    
+    // Generate category data
+    const categoryData = [];
+    const categoryCounts = [];
+    categories.forEach(category => {
+        categoryData.push(category);
+        categoryCounts.push(Math.floor(Math.random() * 200) + 50);
+    });
+    
+    // Generate department performance
+    const deptPerformance = departments.map(() => Math.floor(Math.random() * 20) + 75);
+    
+    // Generate forecast data
+    const forecastMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'];
+    const actualData = forecastMonths.map(() => Math.floor(Math.random() * 50) + 40);
+    const predictedData = actualData.map(value => value + Math.floor(Math.random() * 20) - 5);
+    
+    analyticsData = {
+        total_complaints: 1245,
+        avg_resolution_time: 12.5,
+        resolution_rate: 87.3,
+        satisfaction_score: 4.2,
+        trends: {
+            complaints: complaintsTrend,
+            resolution_times: resolutionTrend,
+            categories: categoryData,
+            category_counts: categoryCounts,
+            departments: departments,
+            dept_performance: deptPerformance
+        },
+        heatmap: heatmapData,
+        forecast: {
+            dates: forecastMonths,
+            actual: actualData,
+            predicted: predictedData
+        }
+    };
+}
+
+// Initialize with enhanced data
+function initializeDashboard() {
+    showLoading();
+    
+    // Generate enhanced sample data
+    generateEnhancedSampleData();
+    
+    // Update all components
+    updateMetrics();
+    updateCharts();
+    updateTable();
+    updateHeatmap();
+    updateForecast();
+    
+    // Add some interactivity to KPI cards
+    addKPIInteractivity();
+    
+    // Hide loading after everything is ready
+    setTimeout(() => {
+        hideLoading();
+        showNotification('Analytics dashboard loaded successfully!', 'success');
+    }, 1500);
+}
+
+// Add interactivity to KPI cards
+function addKPIInteractivity() {
+    const kpiCards = document.querySelectorAll('.kpi-card');
+    kpiCards.forEach(card => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', function() {
+            const label = this.querySelector('.kpi-label').textContent;
+            const value = this.querySelector('.kpi-value').textContent;
+            showKPIDetail(label, value);
+        });
+    });
+}
+
+// Show KPI detail modal
+function showKPIDetail(label, value) {
+    const detailModal = `
+        <div class="modal fade" id="kpiDetailModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">${label} Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="text-center mb-4">
+                            <h1 class="display-1 text-primary">${value}</h1>
+                            <p class="lead">Current ${label.toLowerCase()}</p>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Trend Analysis</h6>
+                                <canvas id="kpiDetailChart" height="150"></canvas>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Key Insights</h6>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <i class="fas fa-arrow-up text-success me-2"></i>
+                                        15% improvement this month
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="fas fa-star text-warning me-2"></i>
+                                        Exceeds target by 7%
+                                    </li>
+                                    <li class="list-group-item">
+                                        <i class="fas fa-bullseye text-info me-2"></i>
+                                        Goal: ${getKPIGoal(label)}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Add modal to DOM
+    const modalContainer = document.createElement('div');
+    modalContainer.innerHTML = detailModal;
+    document.body.appendChild(modalContainer);
+    
+    // Show the modal
+    const modal = new bootstrap.Modal(document.getElementById('kpiDetailModal'));
+    modal.show();
+    
+    // Create mini chart
+    setTimeout(() => {
+        const ctx = document.getElementById('kpiDetailChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                datasets: [{
+                    label: label,
+                    data: [65, 72, 68, 75],
+                    borderColor: '#0f766e',
+                    backgroundColor: 'rgba(15,118,110,0.1)',
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: false, min: 60 }
+                }
+            }
+        });
+    }, 100);
+    
+    // Remove modal from DOM after it's hidden
+    document.getElementById('kpiDetailModal').addEventListener('hidden.bs.modal', function() {
+        document.body.removeChild(modalContainer);
+    });
+}
+
+function getKPIGoal(label) {
+    const goals = {
+        'First Response Time': 'Under 2 hours',
+        'Repeat Complaints': 'Below 5%',
+        'High Priority Resolved': 'Above 95%',
+        'Student Satisfaction': '4.5/5 or higher',
+        'Cost per Resolution': 'Under $20',
+        'Staff Efficiency': 'Above 90%'
+    };
+    return goals[label] || 'Not specified';
+}
+
+// Add refresh functionality
+function addRefreshButton() {
+    const header = document.querySelector('.analytics-header .container');
+    const refreshBtn = document.createElement('button');
+    refreshBtn.className = 'btn btn-light ms-2';
+    refreshBtn.innerHTML = '<i class="fas fa-sync-alt"></i>';
+    refreshBtn.title = 'Refresh Data';
+    refreshBtn.onclick = function() {
+        showLoading();
+        setTimeout(() => {
+            generateEnhancedSampleData();
+            updateMetrics();
+            updateCharts();
+            updateTable();
+            updateHeatmap();
+            updateForecast();
+            hideLoading();
+            showNotification('Data refreshed successfully!', 'success');
+        }, 1200);
+    };
+    
+    header.querySelector('div:last-child').appendChild(refreshBtn);
+}
+
+// Print dashboard
+function printDashboard() {
+    window.print();
+}
+
+// Add print button
+function addPrintButton() {
+    const header = document.querySelector('.analytics-header .container');
+    const printBtn = document.createElement('button');
+    printBtn.className = 'btn btn-light ms-2';
+    printBtn.innerHTML = '<i class="fas fa-print"></i>';
+    printBtn.title = 'Print Dashboard';
+    printBtn.onclick = printDashboard;
+    
+    header.querySelector('div:last-child').appendChild(printBtn);
+}
+
+// Add real-time updates simulation
+function simulateRealTimeUpdates() {
+    // Simulate real-time updates every 30 seconds
+    setInterval(() => {
+        // Randomly update one metric
+        const metrics = ['totalComplaints', 'avgResolutionTime', 'resolutionRate', 'satisfactionScore'];
+        const randomMetric = metrics[Math.floor(Math.random() * metrics.length)];
+        
+        const element = document.getElementById(randomMetric);
+        if (element) {
+            const currentValue = parseFloat(element.textContent.replace(/[^0-9.]/g, ''));
+            const change = (Math.random() * 0.5) - 0.25; // Random small change
+            const newValue = Math.max(0, currentValue + (currentValue * change));
+            
+            element.textContent = formatMetricValue(randomMetric, newValue);
+            
+            // Add visual indicator
+            element.classList.add('text-primary');
+            setTimeout(() => {
+                element.classList.remove('text-primary');
+            }, 1000);
+        }
+    }, 30000); // Update every 30 seconds
+}
+
+function formatMetricValue(metricId, value) {
+    switch(metricId) {
+        case 'totalComplaints':
+            return Math.round(value).toLocaleString();
+        case 'avgResolutionTime':
+            return value.toFixed(1) + 'h';
+        case 'resolutionRate':
+            return value.toFixed(1) + '%';
+        case 'satisfactionScore':
+            return value.toFixed(1) + '%';
+        default:
+            return value;
+    }
+}
+
+// Add tooltips to charts
+function addChartTooltips() {
+    const chartCards = document.querySelectorAll('.chart-card');
+    chartCards.forEach(card => {
+        const chartTitle = card.querySelector('h5');
+        if (chartTitle) {
+            chartTitle.style.cursor = 'help';
+            chartTitle.title = 'Click to view detailed analysis';
+            
+            chartTitle.addEventListener('click', function() {
+                const chartType = this.textContent.replace(/.*?(\w+ Chart).*/, '$1');
+                showChartDetail(chartType);
+            });
+        }
+    });
+}
+
+function showChartDetail(chartType) {
+    alert(`Detailed analysis for ${chartType} would be shown here. In a full implementation, this would open a detailed view with more data points, filters, and export options.`);
+}
+
+// Initialize everything when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    initializeDatePicker();
+    addRefreshButton();
+    addPrintButton();
+    addChartTooltips();
+    initializeDashboard();
+    simulateRealTimeUpdates();
+    
+    // Add CSS for print
+    const printStyles = document.createElement('style');
+    printStyles.innerHTML = `
+        @media print {
+            .btn, .filters-card, .modal, .custom-notification {
+                display: none !important;
+            }
+            
+            body {
+                background: white !important;
+            }
+            
+            .chart-card, .metric-card, .data-table-card {
+                break-inside: avoid;
+            }
+        }
+    `;
+    document.head.appendChild(printStyles);
+});
